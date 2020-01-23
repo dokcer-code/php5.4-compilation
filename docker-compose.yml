@@ -1,0 +1,25 @@
+version: '3'
+services:
+    php:
+        build: docker/php
+        working_dir: /usr/local/src/php-5.4.45
+        volumes:
+            - ./src:/var/www/src
+        links:
+          - mysql
+    nginx:
+        build: docker/nginx
+        ports:
+            - 8080:80
+        volumes:
+            - ./src:/var/www/src
+        links:
+            - php
+    mysql:
+        build:
+            context: docker/mysql/
+        environment:
+            MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+            MYSQL_USER: 'test'
+            MYSQL_PASSWORD: 'test'
+            MYSQL_DATABASE: 'test'
